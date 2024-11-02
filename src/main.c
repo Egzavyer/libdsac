@@ -14,13 +14,10 @@ int main()
         printf("Capacity: %d\n", arr->capacity);
         daPrint(arr);
     }
-    for (i = 0; i < 6; i++)
-    {
-        daPop(arr);
-        printf("Size: %d\n", arr->size);
-        printf("Capacity: %d\n", arr->capacity);
-        daPrint(arr);
-    }
+    daRemove(arr, 2);
+    printf("Size: %d\n", arr->size);
+    printf("Capacity: %d\n", arr->capacity);
+    daPrint(arr);
 
     return 0;
 }

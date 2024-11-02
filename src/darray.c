@@ -30,7 +30,7 @@ void daAppend(struct DynamicArray *arr, int value)
 {
     if (arr == NULL)
     {
-        printf("daAppend failed: arr = NULL");
+        printf("daAppend failed: arr = NULL\n");
         return;
     }
 
@@ -46,12 +46,12 @@ void daPop(struct DynamicArray *arr)
 {
     if (arr == NULL)
     {
-        printf("daPop failed: arr = NULL");
+        printf("daPop failed: arr = NULL\n");
         return;
     }
     else if (arr->size <= 0)
     {
-        printf("daPop failed: no elements");
+        printf("daPop failed: no elements\n");
     }
     arr->size--;
     if (arr->size <= (int)(arr->capacity / 2))
@@ -60,11 +60,56 @@ void daPop(struct DynamicArray *arr)
     }
 }
 
+void daRemove(struct DynamicArray *arr, int index)
+{
+    if (arr == NULL)
+    {
+        printf("daRemove failed: arr = NULL\n");
+        free(arr);
+        return;
+    }
+    else if (index > arr->size || index <= -2)
+    {
+        printf("daRemove failed: index out of bounds\n");
+        return;
+    }
+
+    if (index == -1)
+    {
+        daPop(arr);
+    }
+
+    if (arr->size - 1 <= (int)(arr->capacity / 2))
+    {
+        arr->capacity = (int)(arr->capacity / 2);
+    }
+
+    int *newData = calloc(arr->size, sizeof(arr->data[0]));
+    if (newData == NULL)
+    {
+        printf("daRemove failed: newData = NULL\n");
+        free(newData);
+        return;
+    }
+
+    int newDataSize = 0;
+    for (int i = 0; i < arr->size; i++)
+    {
+        if (i != index)
+        {
+            newData[newDataSize] = arr->data[i];
+            newDataSize++;
+        }
+    }
+    arr->size--;
+    arr->data = newData;
+}
+
 void daPrint(struct DynamicArray *arr)
 {
     if (arr == NULL)
     {
-        printf("daPrint failed: arr = NULL");
+        printf("daPrint failed: arr = NULL\n");
         return;
     }
     else if (arr->size == 0 || arr->capacity == 0)
@@ -91,7 +136,7 @@ void daResize(struct DynamicArray *arr, int newSize)
 {
     if (arr == NULL)
     {
-        printf("daResize failed: arr = NULL");
+        printf("daResize failed: arr = NULL\n");
         return;
     }
     else if (newSize == 0)
