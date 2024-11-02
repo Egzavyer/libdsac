@@ -2,7 +2,7 @@
 
 struct DynamicArray *daCreate(int cap)
 {
-    DynamicArray *arr = malloc(sizeof(DynamicArray));
+    struct DynamicArray *arr = malloc(sizeof(struct DynamicArray));
     if (arr == NULL)
     {
         printf("DynamicArray malloc failed\n");
@@ -14,7 +14,6 @@ struct DynamicArray *daCreate(int cap)
     if (arr->data == NULL)
     {
         printf("DynamicArray.data calloc failed\n");
-        free(arr->data);
         free(arr);
         return NULL;
     }
@@ -32,12 +31,12 @@ void daFillRand(struct DynamicArray *arr)
     }
 }
 
-void daAppend(struct DynamicArray *arr, int value)
+int daAppend(struct DynamicArray *arr, int value)
 {
     if (arr == NULL)
     {
         printf("daAppend failed: arr = NULL\n");
-        return;
+        return 0;
     }
 
     if (arr->size == arr->capacity)
@@ -46,56 +45,62 @@ void daAppend(struct DynamicArray *arr, int value)
     }
     arr->data[arr->size] = value;
     arr->size++;
+    return 1;
 }
 
-void daPop(struct DynamicArray *arr)
+int daPop(struct DynamicArray *arr)
 {
     if (arr == NULL)
     {
         printf("daPop failed: arr = NULL\n");
-        return;
+        return 0;
     }
     else if (arr->size <= 0)
     {
         printf("daPop failed: no elements\n");
+        return 0;
     }
     arr->size--;
     if (arr->size <= (int)(arr->capacity / 2))
     {
         daResize(arr, (int)(arr->capacity / 2));
     }
+    return 1;
 }
 
-void daRemove(struct DynamicArray *arr, int index)
+int daRemove(struct DynamicArray *arr, int index)
 {
     if (arr == NULL)
     {
         printf("daRemove failed: arr = NULL\n");
-        return;
+        return 0;
     }
     else if (index >= arr->size || index <= -2)
     {
         printf("daRemove failed: index out of bounds\n");
-        return;
+        return 0;
     }
 
     if (index == -1)
     {
         daPop(arr);
-        return;
+        return 1;
     }
 
     if (arr->size - 1 <= (int)(arr->capacity / 2))
     {
         arr->capacity = (int)(arr->capacity / 2);
+        if (arr->capacity == 0)
+        {
+            int *newData = calloc(arr->capacity, sizeof(arr->data[0]));
+        }
     }
 
     int *newData = calloc(arr->size, sizeof(arr->data[0]));
     if (newData == NULL)
     {
         printf("daRemove failed: newData = NULL\n");
-        free(newData);
-        return;
+        return 0;
     }
 
     int newDataSize = 0;
@@ -110,6 +115,7 @@ void daRemove(struct DynamicArray *arr, int index)
     arr->size--;
     free(arr->data);
     arr->data = newData;
+    return 1;
 }
 
 void daPrint(struct DynamicArray *arr)
@@ -121,7 +127,7 @@ void daPrint(struct DynamicArray *arr)
     }
     else if (arr->size == 0 || arr->capacity == 0)
     {
-        printf("[]");
+        printf("[]\n");
         return;
     }
 
@@ -139,12 +145,12 @@ void daPrint(struct DynamicArray *arr)
     }
 }
 
-void daResize(struct DynamicArray *arr, int newSize)
+int daResize(struct DynamicArray *arr, int newSize)
 {
     if (arr == NULL)
     {
         printf("daResize failed: arr = NULL\n");
-        return;
+        return 0;
     }
     else if (newSize == 0)
     {
@@ -153,8 +159,8 @@ void daResize(struct DynamicArray *arr, int newSize)
     int *newData = calloc(newSize, sizeof(arr->data[0]));
     if (newData == NULL)
     {
-        printf("daAppend calloc failed\n");
-        return;
+        printf("daResize calloc failed\n");
+        return 0;
     }
 
     for (int i = 0; i < arr->size; i++)
@@ -164,4 +170,5 @@ void daResize(struct DynamicArray *arr, int newSize)
     free(arr->data);
     arr->data = newData;
     arr->capacity = newSize;
+    return 1;
 }

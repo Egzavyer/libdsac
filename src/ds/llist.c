@@ -22,18 +22,18 @@ struct LList *llCreate(int val)
     return list;
 }
 
-void llAdd(LList *list, int val)
+int llAdd(LList *list, int val)
 {
     if (list == NULL)
     {
         printf("llAdd failed: list = NULL\n");
-        return;
+        return 0;
     }
     Node *newNode = malloc(sizeof(Node));
     if (newNode == NULL)
     {
         printf("llAdd failed: newNode = NULL\n");
-        return;
+        return 0;
     }
 
     newNode->val = val;
@@ -41,6 +41,7 @@ void llAdd(LList *list, int val)
     list->tail->next = newNode;
     list->tail = list->tail->next;
     list->length++;
+    return 1;
 }
 
 void llPrint(LList *list)
@@ -67,16 +68,17 @@ void llPrint(LList *list)
     printf("\n");
 }
 
-void llRemoveTail(LList *list)
+int llRemoveTail(LList *list)
 {
     if (list == NULL)
     {
         printf("llRemoveTail failed: list = NULL\n");
-        return;
+        return 0;
     }
     else if (list->length <= 0)
     {
         printf("llRemoveTail failed: empty list\n");
+        return 0;
     }
 
     Node *curr = list->head;
@@ -89,51 +91,56 @@ void llRemoveTail(LList *list)
     list->tail = curr;
     curr->next = NULL;
     list->length--;
+    return 1;
 }
 
-void llRemoveHead(LList *list)
+int llRemoveHead(LList *list)
 {
     if (list == NULL)
     {
         printf("llRemoveHead failed: list = NULL\n");
-        return;
+        return 0;
     }
     else if (list->length <= 0)
     {
         printf("llRemoveHead failed: empty list\n");
+        return 0;
     }
 
     Node *curr = list->head->next;
     free(list->head);
     list->head = curr;
     list->length--;
+    return 1;
 }
 
-void llRemoveAt(LList *list, int index)
+int llRemoveAt(LList *list, int index)
 {
     if (list == NULL)
     {
         printf("llRemoveAt failed: list = NULL\n");
-        return;
+        return 0;
     }
     else if (list->length <= 0)
     {
         printf("llRemoveAt failed: empty list\n");
+        return 0;
     }
     else if (index >= list->length || index <= -2)
     {
         printf("llRemoveAt failed: index out of bounds\n");
+        return 0;
     }
 
     if (index == 0)
     {
         llRemoveHead(list);
-        return;
+        return 0;
     }
     else if (index == -1 || index == (list->length - 1))
     {
         llRemoveTail(list);
-        return;
+        return 1;
     }
 
     Node *curr = list->head;
@@ -147,23 +154,44 @@ void llRemoveAt(LList *list, int index)
     curr->next = curr->next->next;
     free(target);
     list->length--;
+    return 1;
 }
 
-void llAddAll(LList *list, int *arr, int *arrSize)
+int llAddAll(LList *list, int *arr, int *arrSize)
 {
     if (list == NULL)
     {
         printf("llAddAll failed: list = NULL\n");
-        return;
+        return 0;
     }
     if (arr == NULL)
     {
         printf("llAddAll failed: arr = NULL\n");
-        return;
+        return 0;
     }
 
     for (int i = 0; i < *arrSize; i++)
     {
         llAdd(list, arr[i]);
     }
+    return 1;
+}
+
+int llContains(LList *list, int *element)
+{
+    if (list == NULL)
+    {
+        printf("llContains failed: list = NULL\n");
+        return 0;
+    }
+
+    Node *curr = list->head;
+    while (curr != NULL)
+    {
+        if (curr->val == *element)
+        {
+            return 1;
+        }
+    }
+    return 0;
 }

@@ -18,11 +18,12 @@ typedef struct LList
 } LList;
 
 struct LList *llCreate(int val);
-void llAdd(struct LList *list, int val);
+int llAdd(struct LList *list, int val);
 void llPrint(struct LList *list);
-void llRemoveTail(struct LList *list);
-void llRemoveHead(struct LList *list);
-void llRemoveAt(struct LList *list, int index);
-void llAddAll(struct LList *list, int *arr, int *arrSize);
+int llRemoveTail(struct LList *list);
+int llRemoveHead(struct LList *list);
+int llRemoveAt(struct LList *list, int index);
+int llAddAll(struct LList *list, int *arr, int *arrSize);
+int llContains(LList *list, int *element);
 
 #endif /* LLIST_H */

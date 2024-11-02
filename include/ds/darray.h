@@ -15,10 +15,10 @@ typedef struct DynamicArray
 
 struct DynamicArray *daCreate(int initialSize);
 void daFillRand(struct DynamicArray *arr);
-void daAppend(struct DynamicArray *arr, int value);
-void daPop(struct DynamicArray *arr);
+int daAppend(struct DynamicArray *arr, int value);
+int daPop(struct DynamicArray *arr);
 void daPrint(struct DynamicArray *arr);
-void daRemove(struct DynamicArray *arr, int index);
-static void daResize(struct DynamicArray *arr, int newSize);
+int daRemove(struct DynamicArray *arr, int index);
+static int daResize(struct DynamicArray *arr, int newSize);
 
 #endif /* DARRAY_H */
