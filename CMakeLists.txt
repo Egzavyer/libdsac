@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(DArray)
 
-set(SOURCES src/main.c src/DArray.c)
+set(SOURCES main.c src/ds/DArray.c)
 
 add_executable(DArray ${SOURCES})
 

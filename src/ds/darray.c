@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../include/darray.h"
+#include "../include/ds/darray.h"
 
 struct DynamicArray *daCreate(int cap)
 {
