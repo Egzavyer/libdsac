@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
-project(DArray)
+project(dsa)
 
-set(SOURCES main.c src/ds/DArray.c)
+set(SOURCES main.c src/ds/darray.c src/algos/selectionSort.c)
 
-add_executable(DArray ${SOURCES})
+add_executable(dsa ${SOURCES})
 
-target_include_directories(DArray PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(dsa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

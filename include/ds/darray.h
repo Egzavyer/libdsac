@@ -2,6 +2,10 @@
 #ifndef DARRAY_H
 #define DARRAY_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
 typedef struct DynamicArray
 {
     int *data;
@@ -10,6 +14,7 @@ typedef struct DynamicArray
 } DynamicArray;
 
 struct DynamicArray *daCreate(int initialSize);
+void daFillRand(struct DynamicArray *arr);
 void daAppend(struct DynamicArray *arr, int value);
 void daPop(struct DynamicArray *arr);
 void daPrint(struct DynamicArray *arr);

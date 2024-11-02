@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "../include/ds/darray.h"
 
 struct DynamicArray *daCreate(int cap)
@@ -24,6 +21,15 @@ struct DynamicArray *daCreate(int cap)
     arr->size = 0;
     arr->capacity = cap;
     return arr;
+}
+
+void daFillRand(struct DynamicArray *arr)
+{
+    srand(time(NULL));
+    for (int i = 0; i < arr->capacity; i++)
+    {
+        daAppend(arr, rand());
+    }
 }
 
 void daAppend(struct DynamicArray *arr, int value)
