@@ -65,10 +65,9 @@ void daRemove(struct DynamicArray *arr, int index)
     if (arr == NULL)
     {
         printf("daRemove failed: arr = NULL\n");
-        free(arr);
         return;
     }
-    else if (index > arr->size || index <= -2)
+    else if (index >= arr->size || index <= -2)
     {
         printf("daRemove failed: index out of bounds\n");
         return;
@@ -102,6 +101,7 @@ void daRemove(struct DynamicArray *arr, int index)
         }
     }
     arr->size--;
+    free(arr->data);
     arr->data = newData;
 }
 
@@ -147,7 +147,6 @@ void daResize(struct DynamicArray *arr, int newSize)
     if (newData == NULL)
     {
         printf("daAppend calloc failed\n");
-        free(newData);
         return;
     }
 
@@ -155,6 +154,7 @@ void daResize(struct DynamicArray *arr, int newSize)
     {
         newData[i] = arr->data[i];
     }
+    free(arr->data);
     arr->data = newData;
     arr->capacity = newSize;
 }
