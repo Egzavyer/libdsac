@@ -4,6 +4,7 @@
 #define DSA_H
 
 #include "ds/darray.h"
+#include "ds/llist.h"
 #include "algos/selectionSort.h"
 #include "algos/bubbleSort.h"
 

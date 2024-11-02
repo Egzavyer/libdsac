@@ -82,6 +82,7 @@ void daRemove(struct DynamicArray *arr, int index)
     if (index == -1)
     {
         daPop(arr);
+        return;
     }
 
     if (arr->size - 1 <= (int)(arr->capacity / 2))

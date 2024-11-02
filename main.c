@@ -4,11 +4,11 @@
 
 int main()
 {
-    DynamicArray *d = daCreate(4);
-    daFillRand(d);
-    daPrint(d);
-    bubbleSort(d->data, d->size, 0);
-    daPrint(d);
-    bubbleSort(d->data, d->size, 1);
-    daPrint(d);
+    LList *list = llCreate(0);
+    DynamicArray *arr = daCreate(5);
+    daFillRand(arr);
+    llAddAll(list, arr->data, &arr->size);
+    llPrint(list);
+    llRemoveAt(list, list->length - 1);
+    llPrint(list);
 }
