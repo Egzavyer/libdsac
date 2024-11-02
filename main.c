@@ -6,6 +6,9 @@ int main()
 {
     DynamicArray *d = daCreate(4);
     daFillRand(d);
-    selectionSort(d->data, d->size);
+    daPrint(d);
+    bubbleSort(d->data, d->size, 0);
+    daPrint(d);
+    bubbleSort(d->data, d->size, 1);
     daPrint(d);
 }
