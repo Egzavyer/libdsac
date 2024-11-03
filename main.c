@@ -4,13 +4,15 @@
 
 int main()
 {
-    Stack *s = sCreate(4);
-    sPush(s, 1);
-    printf("%d", sPeek(s));
-    sPrint(s);
-    sPush(s, 5);
-    sPush(s, 6);
-    sPrint(s);
-    printf("%d", sPop(s));
-    sPrint(s);
+    int size = 5;
+    int *arr = (int *)calloc(size, sizeof(int));
+    for (int i = 0; i < size; i++)
+    {
+        arr[i] = (5 - i);
+    }
+    DynamicArray *da = daCreate(100000);
+    daFillRand(da);
+    da->data = mergeSort(da->data, da->size);
+    daPrint(da);
+    free(da);
 }

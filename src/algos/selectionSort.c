@@ -1,4 +1,4 @@
-#include "../../include/algos/selectionSort.h"
+#include "algos/selectionSort.h"
 
 void selectionSort(int *arr, int size)
 {

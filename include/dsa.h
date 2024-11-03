@@ -6,6 +6,7 @@
 #include "ds/darray.h"
 #include "ds/llist.h"
 #include "ds/stack.h"
+#include "algos/mergeSort.h"
 #include "algos/insertionSort.h"
 #include "algos/selectionSort.h"
 #include "algos/bubbleSort.h"

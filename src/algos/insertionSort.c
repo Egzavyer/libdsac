@@ -1,4 +1,4 @@
-#include "../../include/algos/insertionSort.h"
+#include "algos/insertionSort.h"
 
 void insertionSort(int *arr, int *size)
 {

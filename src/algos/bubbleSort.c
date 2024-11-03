@@ -1,4 +1,4 @@
-#include "../../include/algos/bubbleSort.h"
+#include "algos/bubbleSort.h"
 
 void bubbleSort(int *arr, int size, int order)
 {

@@ -1,4 +1,4 @@
-#include "../../include/ds/llist.h"
+#include "ds/llist.h"
 
 struct LList *llCreate(int val)
 {

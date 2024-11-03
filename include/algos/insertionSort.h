@@ -7,6 +7,5 @@
 #include <stdlib.h>
 
 void insertionSort(int *arr, int *size);
-void show(int *arr, int *size);
 
 #endif /* INSERTION_SORT_H */
