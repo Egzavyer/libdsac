@@ -25,5 +25,4 @@ int llRemoveHead(struct LList *list);
 int llRemoveAt(struct LList *list, int index);
 int llAddAll(struct LList *list, int *arr, int *arrSize);
 int llContains(LList *list, int *element);
-
 #endif /* LLIST_H */

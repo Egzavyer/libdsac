@@ -5,11 +5,8 @@
 int main()
 {
     DynamicArray *d = daCreate(5);
-    daAppend(d, 1);
-    daAppend(d, 2);
-    daAppend(d, 3);
-    daAppend(d, 4);
-    daAppend(d, 5);
-    daRemove(d, 2);
+    daFillRand(d);
+    daPrint(d);
+    insertionSort(d->data, &d->size);
     daPrint(d);
 }
