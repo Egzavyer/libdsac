@@ -4,6 +4,7 @@ project(dsa)
 set(SOURCES main.c 
     src/ds/darray.c 
     src/ds/llist.c
+    src/ds/stack.c
     src/algos/insertionSort.c
     src/algos/selectionSort.c 
     src/algos/bubbleSort.c)

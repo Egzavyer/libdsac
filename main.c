@@ -4,9 +4,13 @@
 
 int main()
 {
-    DynamicArray *d = daCreate(5);
-    daFillRand(d);
-    daPrint(d);
-    insertionSort(d->data, &d->size);
-    daPrint(d);
+    Stack *s = sCreate(4);
+    sPush(s, 1);
+    printf("%d", sPeek(s));
+    sPrint(s);
+    sPush(s, 5);
+    sPush(s, 6);
+    sPrint(s);
+    printf("%d", sPop(s));
+    sPrint(s);
 }
