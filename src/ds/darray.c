@@ -2,7 +2,7 @@
 
 struct DynamicArray *daCreate(int cap)
 {
-    struct DynamicArray *arr = malloc(sizeof(struct DynamicArray));
+    struct DynamicArray *arr = (struct DynamicArray *)malloc(sizeof(struct DynamicArray));
     if (arr == NULL)
     {
         printf("DynamicArray malloc failed\n");
@@ -90,10 +90,6 @@ int daRemove(struct DynamicArray *arr, int index)
     if (arr->size - 1 <= (int)(arr->capacity / 2))
     {
         arr->capacity = (int)(arr->capacity / 2);
-        if (arr->capacity == 0)
-        {
-            int *newData = calloc(arr->capacity, sizeof(arr->data[0]));
-        }
     }
 
     int *newData = calloc(arr->size, sizeof(arr->data[0]));

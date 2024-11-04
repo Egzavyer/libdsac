@@ -192,6 +192,7 @@ int llContains(LList *list, int *element)
         {
             return 1;
         }
+        curr = curr->next;
     }
     return 0;
 }

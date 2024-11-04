@@ -4,15 +4,14 @@
 
 int main()
 {
-    int size = 5;
-    int *arr = (int *)calloc(size, sizeof(int));
-    for (int i = 0; i < size; i++)
-    {
-        arr[i] = (5 - i);
-    }
-    DynamicArray *da = daCreate(100000);
-    daFillRand(da);
-    da->data = mergeSort(da->data, da->size);
+
+    DynamicArray *da = daCreate(4);
+    daAppend(da, 1);
+    daAppend(da, 2);
+    daAppend(da, 3);
+    daAppend(da, 4);
+    daPop(da);
+    daRemove(da, 1);
     daPrint(da);
     free(da);
 }

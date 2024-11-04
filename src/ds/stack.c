@@ -50,8 +50,10 @@ int sPeek(Stack *s)
     {
         fprintf(stderr, "sPeek failed: s is empty\n");
     }
-
-    return *s->top;
+    else
+    {
+        return *s->top;
+    }
 }
 
 int sPop(Stack *s)
