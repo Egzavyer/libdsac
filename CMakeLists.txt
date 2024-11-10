@@ -10,6 +10,28 @@ set(SOURCES main.c
     src/algos/selectionSort.c 
     src/algos/bubbleSort.c)
 
-add_executable(dsa ${SOURCES})
+#add_executable(dsa ${SOURCES})
 
-target_include_directories(dsa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+add_library(dsa STATIC ${SOURCES})
+
+target_include_directories(dsa
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+install(TARGETS dsa
+    EXPORT dsa-config
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include
+)
+
+install(DIRECTORY include/ds DESTINATION include)
+install(DIRECTORY include/ds DESTINATION include)
+
+install(EXPORT dsa-config NAMESPACE dsa:: DESTINATION lib/cmake/dsa)
+
