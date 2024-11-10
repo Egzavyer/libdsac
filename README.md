@@ -1,6 +1,18 @@
 # LIBDSA
  Libray of Custom Data Structures and Algorithm Implementations in C
 
+## Available Data Structues and Algorithms
+### Data Structures
+- Dynamic Array 
+- Singly Linked List
+- Stack
+- Queue
+### Algorithms
+- Bubble Sort
+- Insertion Sort
+- Selection Sort
+- Merge Sort
+
 ## How to Install
 
 ### Minimum Requirements

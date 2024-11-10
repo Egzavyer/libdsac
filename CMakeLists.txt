@@ -5,14 +5,16 @@ set(SOURCES main.c
     src/ds/darray.c 
     src/ds/llist.c
     src/ds/stack.c
+    src/ds/queue.c
     src/algos/mergeSort.c
     src/algos/insertionSort.c
     src/algos/selectionSort.c 
     src/algos/bubbleSort.c)
 
-#add_executable(dsa ${SOURCES})
+add_executable(dsa ${SOURCES})
+target_include_directories(dsa PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_library(dsa STATIC ${SOURCES})
+#[[add_library(dsa STATIC ${SOURCES})
 
 target_include_directories(dsa
     PUBLIC
@@ -33,5 +35,5 @@ install(TARGETS dsa
 install(DIRECTORY include/ds DESTINATION include)
 install(DIRECTORY include/ds DESTINATION include)
 
-install(EXPORT dsa-config NAMESPACE dsa:: DESTINATION lib/cmake/dsa)
+install(EXPORT dsa-config NAMESPACE dsa:: DESTINATION lib/cmake/dsa)]]
 
