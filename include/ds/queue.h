@@ -2,8 +2,7 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "common.h"
 
 typedef struct Queue
 {
@@ -14,11 +13,11 @@ typedef struct Queue
     int rear;
 } Queue;
 
-Queue *qCreate(int initialSize);
-void qEnqueue(Queue *q, int val);
+int qCreate(int capacity, Queue **q);
+int qEnqueue(Queue *q, int val);
 int qDequeue(Queue *q);
-int qRear(Queue *q);
-int qFront(Queue *q);
-void qPrint(Queue *q);
-
+int qRear(Queue *q, int *res);
+int qFront(Queue *q, int *res);
+int qPrint(Queue *q);
+int qDestroy(Queue *q);
 #endif /* QUEUE_H */

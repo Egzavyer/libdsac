@@ -1,8 +1,7 @@
 #ifndef LLIST_H
 #define LLIST_H
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "common.h"
 
 typedef struct Node
 {
@@ -17,12 +16,13 @@ typedef struct LList
     int length;
 } LList;
 
-struct LList *llCreate(int val);
+int llCreate(int val, LList **list);
 int llAdd(struct LList *list, int val);
-void llPrint(struct LList *list);
+int llPrint(struct LList *list);
 int llRemoveTail(struct LList *list);
 int llRemoveHead(struct LList *list);
 int llRemoveAt(struct LList *list, int index);
 int llAddAll(struct LList *list, int *arr, int *arrSize);
-int llContains(LList *list, int *element);
+int llContains(LList *list, int *element, int *res);
+int llDestroy(LList *list);
 #endif /* LLIST_H */

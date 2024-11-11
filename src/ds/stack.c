@@ -1,92 +1,181 @@
 #include "ds/stack.h"
 
-Stack *sCreate(int initialSize)
+int sCreate(int initialSize, Stack **s)
 {
-    Stack *s = (Stack *)malloc(sizeof(struct Stack));
+    Error err = SUCCESS;
     if (s == NULL)
     {
-        fprintf(stderr, "sCreate failed: s = NULL\n");
-        return NULL;
+        err = NULL_PARAM;
     }
-    s->arr = daCreate(initialSize);
-    if (s->arr == NULL)
+    else
     {
-        fprintf(stderr, "sCreate failed: s->arr = NULL\n");
-        free(s);
-        return NULL;
+        *s = (Stack *)malloc(sizeof(struct Stack));
+        if (*s == NULL)
+        {
+            err = MEM_ALLOC_FAIL;
+        }
+        else
+        {
+            (*s)->data = (int *)calloc(initialSize, sizeof(int));
+            if ((*s)->data == NULL)
+            {
+                err = MEM_ALLOC_FAIL;
+                free(*s);
+            }
+            else
+            {
+                (*s)->size = 0;
+                (*s)->capacity = initialSize;
+                (*s)->top = NULL;
+            }
+        }
     }
-    s->size = 0;
-    s->top = NULL;
-    return s;
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "sCreate failed: %s", getErrorName(&err));
+    }
+    return err;
 }
 
 int sPush(Stack *s, int val)
 {
+    Error err = SUCCESS;
     if (s == NULL)
     {
-        fprintf(stderr, "sPush failed: s = NULL\n");
-        return 0;
-    }
-    if (!daAppend(s->arr, val))
-    {
-        fprintf(stderr, "sPush failed: daAppend failed\n");
-        return 0;
-    }
-    s->size++;
-    if (s->size > 0)
-    {
-        s->top = &s->arr->data[s->size - 1];
-    }
-    return 1;
-}
-
-int sPeek(Stack *s)
-{
-    if (s == NULL)
-    {
-        fprintf(stderr, "sPeek failed: s = NULL\n");
-    }
-    else if (s->size <= 0)
-    {
-        fprintf(stderr, "sPeek failed: s is empty\n");
+        err = NULL_PARAM;
     }
     else
     {
-        return *s->top;
+        if (s->size >= s->capacity)
+        {
+            err = OUT_OF_BOUNDS;
+        }
+        else
+        {
+            s->data[s->size] = val;
+            s->top = &s->data[s->size];
+            s->size++;
+        }
     }
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "sPush failed: %s", getErrorName(&err));
+    }
+    return err;
+}
+
+int sPeek(Stack *s, int *res)
+{
+    Error err = SUCCESS;
+    if (s == NULL || res == NULL)
+    {
+        err = NULL_PARAM;
+    }
+    else
+    {
+        if (s->size == 0)
+        {
+            err = OUT_OF_BOUNDS;
+        }
+        else
+        {
+            if (s->top == NULL)
+            {
+                err = NULL_POINTER;
+            }
+            else
+            {
+                *res = *s->top;
+            }
+        }
+    }
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "sPeek failed: %s", getErrorName(&err));
+    }
+    return err;
 }
 
 int sPop(Stack *s)
 {
+    Error err = SUCCESS;
     if (s == NULL)
     {
-        fprintf(stderr, "sPop failed: s = NULL\n");
-    }
-    else if (s->size <= 0)
-    {
-        fprintf(stderr, "sPop failed: s is empty\n");
-    }
-    int res = *s->top;
-    daRemove(s->arr, -1);
-    s->size--;
-    if (s->size == 0)
-    {
-        s->top = NULL;
+        err = NULL_PARAM;
     }
     else
     {
-        s->top = &s->arr->data[s->size - 1];
+        if (s->size <= 0)
+        {
+            err = OUT_OF_BOUNDS;
+        }
+        else if (s->top == NULL)
+        {
+            err = NULL_POINTER;
+        }
+        else
+        {
+            s->size--;
+            if (s->size == 0)
+            {
+                s->top = NULL;
+            }
+            else
+            {
+                s->top = &s->data[s->size];
+            }
+        }
     }
-    return res;
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "sPop failed: %s", getErrorName(&err));
+    }
+    return err;
 }
 
-void sPrint(Stack *s)
+int sPrint(Stack *s)
 {
+    Error err = SUCCESS;
     if (s == NULL)
     {
-        fprintf(stderr, "sPrint failed: s = NULL\n");
-        return;
+        err = NULL_PARAM;
+    }
+    else if (s->size <= 0)
+    {
+        printf("[]\n");
+    }
+    else
+    {
+        printf("[");
+        for (int i = 0; i < s->size; i++)
+        {
+            printf(", %d", s->data[i]);
+        }
+        printf("]\n");
     }
 
-    daPrint(s->arr);
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "sPrint failed: %s", getErrorName(&err));
+    }
+    return err;
+}
+
+int sDestroy(Stack *s)
+{
+    Error err = SUCCESS;
+    if (s == NULL)
+    {
+        err = NULL_PARAM;
+    }
+    else
+    {
+        free(s->data);
+        free(s);
+    }
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "sDestroy failed: %s", getErrorName(&err));
+    }
+    return err;
 }

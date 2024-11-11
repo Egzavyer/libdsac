@@ -2,8 +2,7 @@
 #ifndef DARRAY_H
 #define DARRAY_H
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "common.h"
 #include <time.h>
 
 typedef struct DynamicArray
@@ -13,12 +12,13 @@ typedef struct DynamicArray
     int capacity;
 } DynamicArray;
 
-struct DynamicArray *daCreate(int initialSize);
-void daFillRand(struct DynamicArray *arr);
-int daAppend(struct DynamicArray *arr, int value);
-int daPop(struct DynamicArray *arr);
-void daPrint(struct DynamicArray *arr);
-int daRemove(struct DynamicArray *arr, int index);
-static int daResize(struct DynamicArray *arr, int newSize);
+int daCreate(int cap, DynamicArray **arr);
+void daFillRand(DynamicArray *arr);
+int daAppend(DynamicArray *arr, int value);
+int daPop(DynamicArray *arr);
+int daPrint(DynamicArray *arr);
+int daRemove(DynamicArray *arr, int index);
+static int daResize(DynamicArray *arr, int newSize);
+int daDestroy(DynamicArray *arr);
 
 #endif /* DARRAY_H */

@@ -2,22 +2,22 @@
 
 #ifndef STACK_H
 #define STACK_H
-#include <stdio.h>
-#include <stdlib.h>
 
-#include "darray.h"
+#include "common.h"
 
 typedef struct Stack
 {
-    struct DynamicArray *arr;
+    int *data;
     int size;
     int *top;
+    int capacity;
 } Stack;
 
-Stack *sCreate(int initialSize);
+int sCreate(int initialSize, Stack **s);
 int sPush(Stack *s, int val);
-int sPeek(Stack *s);
+int sPeek(Stack *s, int *res);
 int sPop(Stack *s);
-void sPrint(Stack *s);
+int sPrint(Stack *s);
+int sDestroy(Stack *s);
 
 #endif /* STACK_H */

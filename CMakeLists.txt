@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 project(dsa)
 
 set(SOURCES main.c 
+    src/common.c
     src/ds/darray.c 
     src/ds/llist.c
     src/ds/stack.c

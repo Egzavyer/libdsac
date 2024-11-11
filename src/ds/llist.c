@@ -1,198 +1,292 @@
 #include "ds/llist.h"
 
-struct LList *llCreate(int val)
+int llCreate(int val, LList **list)
 {
-    LList *list = malloc(sizeof(LList));
+    Error err = SUCCESS;
     if (list == NULL)
     {
-        printf("llCreate failed: list = NULL\n");
-        return NULL;
+        err = NULL_PARAM;
     }
-    list->head = malloc(sizeof(Node));
-    if (list->head == NULL)
+    else
     {
-        printf("llCreate failed: list->head = NULL\n");
-        free(list);
-        return NULL;
+        *list = malloc(sizeof(LList));
+        if (*list == NULL)
+        {
+            err = MEM_ALLOC_FAIL;
+        }
+        else
+        {
+            (*list)->head = malloc(sizeof(Node));
+            if ((*list)->head == NULL)
+            {
+                err = MEM_ALLOC_FAIL;
+                free(*list);
+            }
+            else
+            {
+                (*list)->head->val = val;
+                (*list)->tail = (*list)->head;
+                (*list)->head->next = NULL;
+                (*list)->length = 1;
+            }
+        }
     }
-    list->head->val = val;
-    list->tail = list->head;
-    list->head->next = NULL;
-    list->length = 1;
-    return list;
+
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "llCreate failed: %s", getErrorName(&err));
+    }
+    return err;
 }
 
 int llAdd(LList *list, int val)
 {
+    Error err = SUCCESS;
     if (list == NULL)
     {
-        printf("llAdd failed: list = NULL\n");
-        return 0;
+        err = NULL_PARAM;
     }
-    Node *newNode = malloc(sizeof(Node));
-    if (newNode == NULL)
+    else
     {
-        printf("llAdd failed: newNode = NULL\n");
-        return 0;
-    }
-
-    newNode->val = val;
-    newNode->next = NULL;
-    list->tail->next = newNode;
-    list->tail = list->tail->next;
-    list->length++;
-    return 1;
-}
-
-void llPrint(LList *list)
-{
-    if (list == NULL)
-    {
-        printf("llPrint failed: list = NULL\n");
-        return;
-    }
-
-    Node *curr = list->head;
-    for (int i = 0; i < list->length; i++)
-    {
-        if (i != 0)
+        Node *newNode = malloc(sizeof(Node));
+        if (newNode == NULL)
         {
-            printf(" -> %d", curr->val);
+            err = MEM_ALLOC_FAIL;
         }
         else
         {
-            printf("%d", curr->val);
+            newNode->val = val;
+            newNode->next = NULL;
+            list->tail->next = newNode;
+            list->tail = list->tail->next;
+            list->length++;
         }
-        curr = curr->next;
     }
-    printf("\n");
+
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "llAdd failed: %s", getErrorName(&err));
+    }
+    return err;
+}
+
+int llPrint(LList *list)
+{
+    Error err = SUCCESS;
+    if (list == NULL)
+    {
+        err = NULL_PARAM;
+    }
+    else
+    {
+        Node *curr = list->head;
+        for (int i = 0; i < list->length; i++)
+        {
+            if (i != 0)
+            {
+                printf(" -> %d", curr->val);
+            }
+            else
+            {
+                printf("%d", curr->val);
+            }
+            curr = curr->next;
+        }
+        printf("\n");
+    }
+
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "llPrint failed: %s", getErrorName(&err));
+    }
+    return err;
 }
 
 int llRemoveTail(LList *list)
 {
+    Error err = SUCCESS;
     if (list == NULL)
     {
-        printf("llRemoveTail failed: list = NULL\n");
-        return 0;
+        err = NULL_PARAM;
     }
     else if (list->length <= 0)
     {
-        printf("llRemoveTail failed: empty list\n");
-        return 0;
+        err = OUT_OF_BOUNDS;
     }
-
-    Node *curr = list->head;
-    while (curr->next != list->tail)
+    else
     {
-        curr = curr->next;
+        Node *curr = list->head;
+        while (curr->next != list->tail)
+        {
+            curr = curr->next;
+        }
+
+        free(list->tail);
+        list->tail = curr;
+        curr->next = NULL;
+        list->length--;
     }
 
-    free(list->tail);
-    list->tail = curr;
-    curr->next = NULL;
-    list->length--;
-    return 1;
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "llRemoveTail failed: %s", getErrorName(&err));
+    }
+    return err;
 }
 
 int llRemoveHead(LList *list)
 {
+    Error err = SUCCESS;
     if (list == NULL)
     {
-        printf("llRemoveHead failed: list = NULL\n");
-        return 0;
+        err = NULL_PARAM;
     }
     else if (list->length <= 0)
     {
-        printf("llRemoveHead failed: empty list\n");
-        return 0;
+        err = OUT_OF_BOUNDS;
+    }
+    else
+    {
+        Node *curr = list->head->next;
+        if (list->head == list->tail)
+        {
+            list->tail = curr;
+        }
+        free(list->head);
+        list->head = curr;
+        list->length--;
     }
 
-    Node *curr = list->head->next;
-    free(list->head);
-    list->head = curr;
-    list->length--;
-    return 1;
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "llRemoveHead failed: %s", getErrorName(&err));
+    }
+    return err;
 }
 
 int llRemoveAt(LList *list, int index)
 {
+    Error err = SUCCESS;
     if (list == NULL)
     {
-        printf("llRemoveAt failed: list = NULL\n");
-        return 0;
+        err = NULL_PARAM;
     }
     else if (list->length <= 0)
     {
-        printf("llRemoveAt failed: empty list\n");
-        return 0;
+        err = OUT_OF_BOUNDS;
     }
     else if (index >= list->length || index <= -2)
     {
-        printf("llRemoveAt failed: index out of bounds\n");
-        return 0;
+        err = OUT_OF_BOUNDS;
+    }
+    else
+    {
+        if (index == 0)
+        {
+            llRemoveHead(list);
+        }
+        else if (index == -1 || index == (list->length - 1))
+        {
+            llRemoveTail(list);
+        }
+        else
+        {
+            Node *curr = list->head;
+            int count = 0;
+            while (count != index - 1)
+            {
+                curr = curr->next;
+                count++;
+            }
+            Node *target = curr->next;
+            curr->next = curr->next->next;
+            free(target);
+            list->length--;
+        }
     }
 
-    if (index == 0)
+    if (err != SUCCESS)
     {
-        llRemoveHead(list);
-        return 0;
+        fprintf(stderr, "llRemoveAt failed: %s", getErrorName(&err));
     }
-    else if (index == -1 || index == (list->length - 1))
-    {
-        llRemoveTail(list);
-        return 1;
-    }
-
-    Node *curr = list->head;
-    int count = 0;
-    while (count != index - 1)
-    {
-        curr = curr->next;
-        count++;
-    }
-    Node *target = curr->next;
-    curr->next = curr->next->next;
-    free(target);
-    list->length--;
-    return 1;
+    return err;
 }
 
 int llAddAll(LList *list, int *arr, int *arrSize)
 {
+    Error err = SUCCESS;
     if (list == NULL)
     {
-        printf("llAddAll failed: list = NULL\n");
-        return 0;
+        err = NULL_PARAM;
     }
-    if (arr == NULL)
+    else if (arr == NULL)
     {
-        printf("llAddAll failed: arr = NULL\n");
-        return 0;
+        err = NULL_PARAM;
+    }
+    else
+    {
+        for (int i = 0; i < *arrSize; i++)
+        {
+            llAdd(list, arr[i]);
+        }
     }
 
-    for (int i = 0; i < *arrSize; i++)
+    if (err != SUCCESS)
     {
-        llAdd(list, arr[i]);
+        fprintf(stderr, "llAddAll failed: %s", getErrorName(&err));
     }
-    return 1;
+    return err;
 }
 
-int llContains(LList *list, int *element)
+int llContains(LList *list, int *element, int *res)
 {
+    Error err = SUCCESS;
+    if (list == NULL || element == NULL || res == NULL)
+    {
+        err = NULL_PARAM;
+    }
+    else
+    {
+        Node *curr = list->head;
+        *res = -1;
+        for (int i = 0; i < list->length; i++)
+        {
+            if (curr->val == *element)
+            {
+                *res = i;
+            }
+            curr = curr->next;
+        }
+    }
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "llContains failed: %s", getErrorName(&err));
+    }
+    return err;
+}
+
+int llDestroy(LList *list)
+{
+    Error err = SUCCESS;
     if (list == NULL)
     {
-        printf("llContains failed: list = NULL\n");
-        return 0;
+        err = NULL_PARAM;
+    }
+    else
+    {
+        Node *curr = list->head;
+        while (curr != NULL)
+        {
+            Node *next = curr->next;
+            free(curr);
+            curr = next;
+        }
+        free(list);
     }
 
-    Node *curr = list->head;
-    while (curr != NULL)
+    if (err != SUCCESS)
     {
-        if (curr->val == *element)
-        {
-            return 1;
-        }
-        curr = curr->next;
+        fprintf(stderr, "llDestroy failed: %s", getErrorName(&err));
     }
-    return 0;
+    return err;
 }

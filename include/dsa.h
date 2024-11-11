@@ -3,6 +3,8 @@
 #ifndef DSA_H
 #define DSA_H
 
+#include "common.h"
+
 #include "ds/darray.h"
 #include "ds/llist.h"
 #include "ds/stack.h"

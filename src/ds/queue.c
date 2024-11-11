@@ -1,144 +1,235 @@
 #include "ds/queue.h"
 
-Queue *qCreate(int capacity)
+int qCreate(int capacity, Queue **q)
 {
-    Queue *q = (struct Queue *)malloc(sizeof(struct Queue));
+    Error err = SUCCESS;
     if (q == NULL)
     {
-        fprintf(stderr, "qCreate failed: q = NULL\n");
-        return NULL;
+        err = NULL_PARAM;
     }
-    q->data = (int *)calloc(capacity, sizeof(int));
-    if (q->data == NULL)
+    else
     {
-        fprintf(stderr, "qCreate failed: q->data = NULL\n");
-        free(q);
-        return NULL;
-    }
-    q->capacity = capacity;
-    q->size = 0;
-    q->front = -1;
-    q->rear = -1;
-    return q;
-}
-
-void qEnqueue(Queue *q, int val)
-{
-    if (q == NULL)
-    {
-        fprintf(stderr, "qEnqueue failed: q = NULL\n");
-        exit(1);
-    }
-    if (q->rear >= q->capacity)
-    {
-        if (q->size == q->capacity)
+        *q = (Queue *)malloc(sizeof(struct Queue));
+        if (*q == NULL)
         {
-            fprintf(stderr, "qEnqueue failed: max capacity of %d has been reached\n", q->capacity);
-            exit(1);
+            err = MEM_ALLOC_FAIL;
         }
         else
         {
-            int *newData = (int *)calloc(q->capacity, sizeof(int));
-            if (newData == NULL)
+            (*q)->data = (int *)calloc(capacity, sizeof(int));
+            if ((*q)->data == NULL)
             {
-                fprintf(stderr, "qEnqueu failed: newData = NULL\n");
-                exit(1);
+                err = MEM_ALLOC_FAIL;
+                free(*q);
             }
-            for (int i = 0; i < q->size; i++)
+            else
             {
-                newData[i] = q->data[q->front + i];
+                (*q)->capacity = capacity;
+                (*q)->size = 0;
+                (*q)->front = -1;
+                (*q)->rear = -1;
             }
-            free(q->data);
-            q->data = newData;
-            q->front = 0;
-            q->rear = q->size;
         }
     }
-    if (q->size == 0)
+    if (err != SUCCESS)
     {
-        q->rear = 0;
-        q->front = 0;
+        fprintf(stderr, "qCreate failed: %s", getErrorName(&err));
     }
-    q->data[q->rear] = val;
-    q->rear++;
-    q->size++;
+    return err;
+}
+
+int qEnqueue(Queue *q, int val)
+{
+    Error err = SUCCESS;
+    if (q == NULL)
+    {
+        err = NULL_PARAM;
+    }
+    else
+    {
+        if (q->rear >= q->capacity)
+        {
+            if (q->size == q->capacity)
+            {
+                err = OUT_OF_BOUNDS;
+            }
+            else
+            {
+                int *newData = (int *)calloc(q->capacity, sizeof(int));
+                if (newData == NULL)
+                {
+                    err = MEM_ALLOC_FAIL;
+                }
+                else
+                {
+                    for (int i = 0; i < q->size; i++)
+                    {
+                        newData[i] = q->data[q->front + i];
+                    }
+                    free(q->data);
+                    q->data = newData;
+                    q->front = 0;
+                    q->rear = q->size;
+                }
+            }
+        }
+        else
+        {
+            if (q->size == 0)
+            {
+                q->rear = 0;
+                q->front = 0;
+            }
+            q->data[q->rear] = val;
+            q->rear++;
+            q->size++;
+        }
+    }
+
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "qEnqueue failed: %s", getErrorName(&err));
+    }
+    return err;
 }
 
 int qDequeue(Queue *q)
 {
+    Error err = SUCCESS;
     if (q == NULL)
     {
-        fprintf(stderr, "qDequeue failed: q = NULL\n");
-        exit(1);
-    }
-    if (q->size <= 0)
-    {
-        fprintf(stderr, "qDequeue failed: queue is empty\n");
-        exit(1);
-    }
-    int result = q->data[q->front];
-    q->data[q->front] = 0;
-    q->size--;
-    if (q->size == 0)
-    {
-        q->front = -1;
-        q->rear = -1;
+        err = NULL_PARAM;
     }
     else
     {
-        q->front++;
+        if (q->size <= 0)
+        {
+            err = OUT_OF_BOUNDS;
+        }
+        else
+        {
+            q->data[q->front] = 0;
+            q->size--;
+            if (q->size == 0)
+            {
+                q->front = -1;
+                q->rear = -1;
+            }
+            else
+            {
+                q->front++;
+            }
+        }
     }
-    return result;
+
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "qDequeue failed: %s", getErrorName(&err));
+    }
+    return err;
 }
 
-int qRear(Queue *q)
+int qRear(Queue *q, int *res)
 {
-    if (q == NULL)
+    Error err = SUCCESS;
+    if (q == NULL || res == NULL)
     {
-        fprintf(stderr, "qRear failed: q = NULL\n");
-        exit(1);
+        err = NULL_PARAM;
     }
-    if (q->rear == -1)
+    else
     {
-        fprintf(stderr, "qRear failed: q->rear = NULL\n");
-        exit(1);
+        if (q->rear == -1)
+        {
+            err = OUT_OF_BOUNDS;
+        }
+        else
+        {
+            *res = q->data[q->rear - 1];
+        }
     }
-    return q->data[q->rear - 1];
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "qRear failed: %s", getErrorName(&err));
+    }
+    return err;
 }
 
-int qFront(Queue *q)
+int qFront(Queue *q, int *res)
 {
-    if (q == NULL)
+    Error err = SUCCESS;
+    if (q == NULL || res == NULL)
     {
-        fprintf(stderr, "qFront failed: q = NULL\n");
-        exit(1);
+        err = NULL_PARAM;
     }
-    if (q->front == -1)
+    else
     {
-        fprintf(stderr, "qFront failed: q->front = NULL\n");
-        exit(1);
+        if (q->front == -1)
+        {
+            err = OUT_OF_BOUNDS;
+        }
+        else
+        {
+            *res = q->data[q->front];
+        }
     }
-    return q->data[q->front];
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "qFront failed: %s", getErrorName(&err));
+    }
+    return err;
 }
 
-void qPrint(Queue *q)
+int qPrint(Queue *q)
 {
+    Error err = SUCCESS;
     if (q == NULL)
     {
-        fprintf(stderr, "qPrint failed: q = NULL\n");
-        exit(1);
+        err = NULL_PARAM;
     }
-    if (q->front == -1 || q->rear == -1)
+    else
     {
-        fprintf(stderr, "qPrint failed: q->front or q->rear = NULL\n");
-        exit(1);
+        if (q->size == 0)
+        {
+            printf("[]\n");
+        }
+        else if (q->front == -1 || q->rear == -1)
+        {
+            err = OUT_OF_BOUNDS;
+        }
+        else
+        {
+            int curr = q->front;
+            printf("[");
+            while (curr != q->rear)
+            {
+                printf(" %d", q->data[curr]);
+                curr++;
+            }
+            printf(" ]\n");
+        }
     }
-    int curr = q->front;
-    printf("[");
-    while (curr != q->rear)
+    if (err != SUCCESS)
     {
-        printf(" %d", q->data[curr]);
-        curr++;
+        fprintf(stderr, "qPrint failed: %s", getErrorName(&err));
     }
-    printf(" ]\n");
+    return err;
+}
+
+int qDestroy(Queue *q)
+{
+    Error err = SUCCESS;
+    if (q == NULL)
+    {
+        err = NULL_PARAM;
+    }
+    else
+    {
+        free(q->data);
+        free(q);
+    }
+    if (err != SUCCESS)
+    {
+        fprintf(stderr, "qPrint failed: %s", getErrorName(&err));
+    }
+    return err;
 }
