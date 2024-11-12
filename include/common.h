@@ -1,12 +1,10 @@
-#pragma once
 #ifndef COMMON_H
 #define COMMON_H
 
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef enum
-{
+typedef enum {
     INT_OVERFLOW = -4,
     NULL_POINTER = -3,
     NULL_PARAM = -2,
@@ -15,6 +13,6 @@ typedef enum
     SUCCESS = 1
 } Error;
 
-char *getErrorName(Error *err);
+char *getErrorName(const Error *err);
 
 #endif /* COMMON_H */

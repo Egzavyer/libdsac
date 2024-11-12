@@ -3,7 +3,6 @@
 #define DARRAY_H
 
 #include "common.h"
-#include <time.h>
 
 typedef struct DynamicArray
 {
@@ -18,7 +17,7 @@ int daAppend(DynamicArray *arr, int value);
 int daPop(DynamicArray *arr);
 int daPrint(DynamicArray *arr);
 int daRemove(DynamicArray *arr, int index);
-static int daResize(DynamicArray *arr, int newSize);
+static Error daResize(DynamicArray *arr, int newSize);
 int daDestroy(DynamicArray *arr);
 
 #endif /* DARRAY_H */
